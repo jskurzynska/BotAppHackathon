@@ -119,11 +119,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Common\IEnumerableExtender.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Questions\CasualQuestions.cs" />
+    <Compile Include="Questions\ITechnicalQuestions.cs" />
+    <Compile Include="Questions\QuestionAboutJobPosition.cs" />
+    <Compile Include="Questions\QuestionProvider.cs" />
+    <Compile Include="Questions\QuestionsManager.cs" />
+    <Compile Include="Questions\TechnicalQuestions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
