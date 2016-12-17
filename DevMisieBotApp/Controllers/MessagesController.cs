@@ -26,24 +26,18 @@ namespace DevMisieBotApp
         [HttpPost]
         public IHttpActionResult Post([FromBody]Activity activity)
         {
-            Activity reply;
-            string question = "";
+            if (string.IsNullOrEmpty(activity.Text))
+            {
+                return NotFound();
+            }
 
+            string reply = "";
             if (activity.Type == ActivityTypes.Message)
             {
-                ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
-                Activity reply = null;
                 // calculate something for us to return
                 int length = (activity.Text ?? string.Empty).Length;
                 var keyPhrases =  TextAnalytics.GetKeyPhrases(activity.Text,activity.Id);
-                var message = new MessageModel()
-                {
-                   // KeyPhrases = keyPhrases.documents[0].keyPhrases,
-                    MessageID = activity.Id,
-                    Text = activity.Text
-                };
-
-
+              
                 MessageDB.MessagesList.Add(message);
                 var keys = _keyWords_manager.FindKeyWords(activity.Text,_question_manager.CurrentTopic);
                 if (keys.Count == 0)
@@ -51,13 +45,13 @@ namespace DevMisieBotApp
                     var topic = _keyWords_manager.RecognizeTopic(activity.Text);
                     if (topic != Topic.None)
                     {
-                        reply = activity.CreateReply(_question_manager.GetQuestion(topic));
+                        reply = _question_manager.GetQuestion(topic);
                     }
                 }
                 _question_manager.AllowToNextQuestion = keys.Count > 0;
-                if (reply == null)
+                if (String.IsNullOrEmpty(reply))
                 {
-                    reply = activity.CreateReply(_question_manager.GetQuestion());
+                    reply = _question_manager.GetQuestion();
                 }
 
                 // connector.Conversations.ReplyToActivityAsync(reply);
@@ -69,7 +63,7 @@ namespace DevMisieBotApp
             //var response = Request.CreateResponse(HttpStatusCode.OK);
             //response.Content = 
             //return response;
-            return Ok(question);
+            return Ok(reply);
         }
 
         private Activity HandleSystemMessage(Activity message)
