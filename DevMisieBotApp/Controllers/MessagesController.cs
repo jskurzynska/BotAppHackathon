@@ -1,18 +1,14 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Description;
 using DevMisieBotApp.Models;
 using Microsoft.Bot.Connector;
-using Newtonsoft.Json;
-using System.Web.Script.Serialization;
 using DevMisieBotApp.DB;
 using DevMisieBotApp.Services;
-using Microsoft.Bot.Builder.Dialogs;
+using DevMisieBotApp.Questions;
+
 
 namespace DevMisieBotApp
 {
@@ -23,6 +19,7 @@ namespace DevMisieBotApp
         /// POST: api/Messages
         /// Receive a message from a user and reply to it
         /// </summary>
+        private static  readonly QuestionsManager _question_manager = new QuestionsManager();
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
 
@@ -39,9 +36,11 @@ namespace DevMisieBotApp
                     Text = activity.Text
                 };
                 MessageDB.MessagesList.Add(message);
-                // return our reply to the user
-                Activity reply = activity.CreateReply($"You sent {activity.Text} which was {length} characters");
 
+               // Activity reply = activity.CreateReply($"You sent {activity.Text} which was {length} characters");
+                //var reply = activity.CreateReply(_casualQuestions.GetRandomQuestion());
+                var proper_answer = _question_manager.GetAnswerPersentage(activity.Text);
+                var reply = activity.CreateReply(_question_manager.GetQuestion());
                 await connector.Conversations.ReplyToActivityAsync(reply);
             }
             else
