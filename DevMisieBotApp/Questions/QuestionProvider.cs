@@ -17,7 +17,7 @@ namespace DevMisieBotApp.Questions
             Questions = new Dictionary<Topic, List<string>>();
             AddQuestionsToPool(new List<string>
             {
-            "Welcome in our recruitment process, I'm your personal assistant at this stage! I can see you, recognize your sentiment and gather all needed information, can we start?"
+            "Welcome in our recruitment process, I'm your personal assistant at this stage! I can see you, recognize your sentiment and gather all needed information!"
             }, Topic.Introduction);
             AddQuestionsToPool(new List<string>
             {
@@ -50,8 +50,8 @@ namespace DevMisieBotApp.Questions
             }, Topic.Joke);
             AddQuestionsToPool(new List<string>
             {
-             "Where Did you work?"
-            }, Topic.BadAnswer);
+             "We can start from scratch :) Say hello to start."
+            }, Topic.Reset);
         }
         private Dictionary<Topic,List<string>> _used = new Dictionary<Topic, List<string>>();
         public string GetRandomQuestion(Topic topic)

@@ -13,6 +13,7 @@ namespace DevMisieBotApp.Questions
         private const int MAX_CASUAL_QUESTIONS = 3;
         private const int TOJOB = 4;
         private readonly QuestionProvider _questionsProvider;
+        private readonly QuestionProvider _techProvider;
         
 
         private int _asked_questions_count;
@@ -23,6 +24,7 @@ namespace DevMisieBotApp.Questions
         public QuestionsManager()
         {
             _questionsProvider = new QuestionProvider();
+            _techProvider = new QuestionProvider();
             Sentiment = 0.5f;
             AllowToNextQuestion = true;
             _asked_questions_count = 0;
@@ -54,17 +56,21 @@ namespace DevMisieBotApp.Questions
         {
             string question;
 
-            if (_asked_questions_count < HELLO_SENTECE)
+            if (_asked_questions_count == 1)
             {
                 question = _questionsProvider.GetRandomQuestion(Topic.Introduction);
                 CurrentTopic = Topic.Introduction;
             }
-            else if (_asked_questions_count < CLOSER)
+            else if (_asked_questions_count == 2)
             {
                 question = _questionsProvider.GetRandomQuestion(Topic.Closer);
                 CurrentTopic = Topic.Closer;
             }
-            else if (_asked_questions_count < MAX_CASUAL_QUESTIONS)
+            else if (_asked_questions_count == 3)
+            {
+                question = _questionsProvider.GetRandomQuestion(Topic.Casual);
+            }
+            else if (_asked_questions_count == 4)
             {
                 question = _questionsProvider.GetRandomQuestion(Topic.Experience);
                 CurrentTopic = Topic.Casual;

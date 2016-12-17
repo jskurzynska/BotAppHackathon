@@ -38,7 +38,7 @@ namespace DevMisieBotApp
                 int length = (activity.Text ?? string.Empty).Length;
                 var keyPhrases =  TextAnalytics.GetKeyPhrases(activity.Text,activity.Id);
               
-                MessageDB.MessagesList.Add(message);
+                //MessageDB.MessagesList.Add(message);
                 var keys = _keyWords_manager.FindKeyWords(activity.Text,_question_manager.CurrentTopic);
                 if (keys.Count == 0)
                 {
@@ -51,6 +51,18 @@ namespace DevMisieBotApp
                 _question_manager.AllowToNextQuestion = keys.Count > 0;
                 if (String.IsNullOrEmpty(reply))
                 {
+                    if (_question_manager.CurrentTopic == Topic.Experience)
+                    {
+                        if (_question_manager.CurrentTopic == Topic.Experience)
+                        {
+                            string txt = "";
+                            foreach (var key in keyPhrases.Result.documents)
+                            {
+                                txt += key + ", ";
+                            }
+                            txt += " seems cool!";
+                        }
+                    }
                     reply = _question_manager.GetQuestion();
                 }
 
