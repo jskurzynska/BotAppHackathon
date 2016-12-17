@@ -8,6 +8,7 @@ using Microsoft.Bot.Connector;
 using DevMisieBotApp.DB;
 using DevMisieBotApp.Services;
 using DevMisieBotApp.Questions;
+using TTSSample;
 
 
 namespace DevMisieBotApp
@@ -20,9 +21,9 @@ namespace DevMisieBotApp
         /// Receive a message from a user and reply to it
         /// </summary>
         private static  readonly QuestionsManager _question_manager = new QuestionsManager();
+        private  static readonly Speech _speech = new Speech();
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
-
             if (activity.Type == ActivityTypes.Message)
             {
                 ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
@@ -40,7 +41,9 @@ namespace DevMisieBotApp
                // Activity reply = activity.CreateReply($"You sent {activity.Text} which was {length} characters");
                 //var reply = activity.CreateReply(_casualQuestions.GetRandomQuestion());
                 var proper_answer = _question_manager.GetAnswerPersentage(activity.Text);
-                var reply = activity.CreateReply(_question_manager.GetQuestion());
+                var question = _question_manager.GetQuestion();
+                var reply = activity.CreateReply(question);
+                _speech.GetSpeechStream(question);
                 await connector.Conversations.ReplyToActivityAsync(reply);
             }
             else

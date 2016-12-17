@@ -30,7 +30,7 @@ namespace DevMisieBotApp.Questions
             string question;
             if (_asked_questions_count < HELLO_SENTECE)
             {
-                return "Hello! " + _casual_questions.GetRandomQuestion();
+                question = "Hello! What's your name and surname?";
             }
             else if (_asked_questions_count < MAX_CASUAL_QUESTIONS)
             {
