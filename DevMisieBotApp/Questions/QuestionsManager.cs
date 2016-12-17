@@ -12,6 +12,7 @@ namespace DevMisieBotApp.Questions
         private const int MAX_CASUAL_QUESTIONS = 2;
         private const int JOB_POSITION_QUESTION = 3 + MAX_CASUAL_QUESTIONS;
         private readonly QuestionProvider _questionsProvider;
+        private readonly  TechnicalQuestions _technicalQuestions = new TechnicalQuestions();
         
 
         private int _asked_questions_count;
@@ -78,7 +79,7 @@ namespace DevMisieBotApp.Questions
             }
             else
             {
-                question = _questionsProvider.GetRandomQuestion(Topic.Technology);
+                question = _technicalQuestions.GetRandomQuestion(Topic.Introduction);
                 CurrentTopic = Topic.Joke;
 
             }
