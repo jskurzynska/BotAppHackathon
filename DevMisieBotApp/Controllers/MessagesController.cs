@@ -14,7 +14,7 @@ using TTSSample;
 
 namespace DevMisieBotApp
 {
-    [BotAuthentication]
+    //[BotAuthentication]
     public class MessagesController : ApiController
     {
         /// <summary>
@@ -23,23 +23,21 @@ namespace DevMisieBotApp
         /// </summary>
         private static  readonly QuestionsManager _question_manager = new QuestionsManager();
         private static readonly KeyWordsManager _keyWords_manager = new KeyWordsManager();
-        public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
+        [HttpPost]
+        public IHttpActionResult Post([FromBody]Activity activity)
         {
+            if (string.IsNullOrEmpty(activity.Text))
+            {
+                return NotFound();
+            }
+
+            string reply = "";
             if (activity.Type == ActivityTypes.Message)
             {
-                ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
-                Activity reply = null;
-
-                var keyPhrases = await TextAnalytics.GetKeyPhrases(activity.Text,activity.Id);
-
-                var message = new MessageModel()
-                {
-                    KeyPhrases = keyPhrases.documents[0].keyPhrases,
-                    MessageID = activity.Id,
-                    Text = activity.Text
-                };
-
-
+                // calculate something for us to return
+                int length = (activity.Text ?? string.Empty).Length;
+                var keyPhrases =  TextAnalytics.GetKeyPhrases(activity.Text,activity.Id);
+              
                 MessageDB.MessagesList.Add(message);
                 var keys = _keyWords_manager.FindKeyWords(activity.Text,_question_manager.CurrentTopic);
                 if (keys.Count == 0)
@@ -47,23 +45,25 @@ namespace DevMisieBotApp
                     var topic = _keyWords_manager.RecognizeTopic(activity.Text);
                     if (topic != Topic.None)
                     {
-                        reply = activity.CreateReply(_question_manager.GetQuestion(topic));
+                        reply = _question_manager.GetQuestion(topic);
                     }
                 }
                 _question_manager.AllowToNextQuestion = keys.Count > 0;
-                if (reply == null)
+                if (String.IsNullOrEmpty(reply))
                 {
-                    reply = activity.CreateReply(_question_manager.GetQuestion());
+                    reply = _question_manager.GetQuestion();
                 }
 
-                await connector.Conversations.ReplyToActivityAsync(reply);
+                // connector.Conversations.ReplyToActivityAsync(reply);
             }
             else
             {
                 HandleSystemMessage(activity);
             }
-            var response = Request.CreateResponse(HttpStatusCode.OK);
-            return response;
+            //var response = Request.CreateResponse(HttpStatusCode.OK);
+            //response.Content = 
+            //return response;
+            return Ok(reply);
         }
 
         private Activity HandleSystemMessage(Activity message)
