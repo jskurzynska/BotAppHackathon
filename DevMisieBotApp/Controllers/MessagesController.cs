@@ -1,12 +1,18 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using DevMisieBotApp.Models;
 using Microsoft.Bot.Connector;
 using Newtonsoft.Json;
+using System.Web.Script.Serialization;
+using DevMisieBotApp.DB;
+using DevMisieBotApp.Services;
+using Microsoft.Bot.Builder.Dialogs;
 
 namespace DevMisieBotApp
 {
@@ -19,14 +25,23 @@ namespace DevMisieBotApp
         /// </summary>
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
+
             if (activity.Type == ActivityTypes.Message)
             {
                 ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
                 // calculate something for us to return
                 int length = (activity.Text ?? string.Empty).Length;
-
+                var keyPhrases = await TextAnalytics.GetKeyPhrases(activity.Text,activity.Id);
+                var message = new MessageModel()
+                {
+                    KeyPhrases = keyPhrases.documents[0].keyPhrases,
+                    MessageID = activity.Id,
+                    Text = activity.Text
+                };
+                MessageDB.MessagesList.Add(message);
                 // return our reply to the user
                 Activity reply = activity.CreateReply($"You sent {activity.Text} which was {length} characters");
+
                 await connector.Conversations.ReplyToActivityAsync(reply);
             }
             else
