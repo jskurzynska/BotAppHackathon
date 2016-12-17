@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using DevMisieBotApp.Conversation;
 using DevMisieBotApp.Models;
 using Microsoft.Bot.Connector;
 using DevMisieBotApp.DB;
@@ -21,6 +22,7 @@ namespace DevMisieBotApp
         /// Receive a message from a user and reply to it
         /// </summary>
         private static  readonly QuestionsManager _question_manager = new QuestionsManager();
+        private static readonly KeyWordsManager _keyWords_manager = new KeyWordsManager();
         [HttpPost]
         public IHttpActionResult Post([FromBody]Activity activity)
         {
@@ -30,6 +32,7 @@ namespace DevMisieBotApp
             if (activity.Type == ActivityTypes.Message)
             {
                 ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
+                Activity reply = null;
                 // calculate something for us to return
                 int length = (activity.Text ?? string.Empty).Length;
                 var keyPhrases =  TextAnalytics.GetKeyPhrases(activity.Text,activity.Id);
@@ -39,11 +42,23 @@ namespace DevMisieBotApp
                     MessageID = activity.Id,
                     Text = activity.Text
                 };
-                MessageDB.MessagesList.Add(message);
 
-                var proper_answer = _question_manager.GetAnswerPersentage(activity.Text);
-                 question = _question_manager.GetQuestion();
-                 //reply = activity.CreateReply(question);
+
+                MessageDB.MessagesList.Add(message);
+                var keys = _keyWords_manager.FindKeyWords(activity.Text,_question_manager.CurrentTopic);
+                if (keys.Count == 0)
+                {
+                    var topic = _keyWords_manager.RecognizeTopic(activity.Text);
+                    if (topic != Topic.None)
+                    {
+                        reply = activity.CreateReply(_question_manager.GetQuestion(topic));
+                    }
+                }
+                _question_manager.AllowToNextQuestion = keys.Count > 0;
+                if (reply == null)
+                {
+                    reply = activity.CreateReply(_question_manager.GetQuestion());
+                }
 
                 // connector.Conversations.ReplyToActivityAsync(reply);
             }
