@@ -17,23 +17,32 @@ namespace DevMisieBotApp.Questions
             Questions = new Dictionary<Topic, List<string>>();
             AddQuestionsToPool(new List<string>
             {
-             "How are you?",
-            "How are you feeling?",
-            "What are you going to do today?",
-            "What is your best childhood memory?",
-            "What do you feel most proud of?",
-            "What is your favorite music?",
-            "If you could travel anywhere, where would you go and why?",
-            "If you could only keep five possessions, what would they be?",
-            }, Topic.Joke);
+            "Welcome in our recruitment process, I'm your personal assistant at this stage! I can see you, recognize your sentiment and gather all needed information!"
+            }, Topic.Introduction);
+            AddQuestionsToPool(new List<string>
+            {
+            "So, really nice to meet you! How are you feeling, can we meet closer? ",
+            "You seems really positive person, can we meet closer?",
+            }, Topic.Closer);
 
             AddQuestionsToPool(new List<string>
             {
-             "Try again"
+            "Let's start with the easy one. If you could travel anywhere, where would you go and why?",
+            "What kind of music do you like listen to?"
+            }, Topic.Casual);
+
+            AddQuestionsToPool(new List<string>
+            {
+             "I didn't get it, can u repeat?",
+             "Can u talk a bit slower? Thanks so much, I'm still learning!"
             }, Topic.Attempt);
-
             AddQuestionsToPool(new List<string>
             {
+             "Do you think maybe about change your current position?"
+            }, Topic.Job);
+            AddQuestionsToPool(new List<string>
+            {
+             "Tell me more about your experience!",
              "Why do you want this job?",
              "What are your future plans for this job?",
              "What is the key to success in this organization?",
@@ -47,17 +56,15 @@ namespace DevMisieBotApp.Questions
              "What do you ultimately want to become?",
              "What's the last book you read?",
              "What do you know about this industry?"
-
             }, Topic.Experience);
             AddQuestionsToPool(new List<string>
             {
-             "Hi, hi",
-             "Hello"
-            }, Topic.Introduction);
+             ""
+            }, Topic.Joke);
             AddQuestionsToPool(new List<string>
             {
-             "Where Did you work?"
-            }, Topic.BadAnswer);
+             "We can start from scratch :) Say hello to start."
+            }, Topic.Reset);
         }
         private Dictionary<Topic,List<string>> _used = new Dictionary<Topic, List<string>>();
         public string GetRandomQuestion(Topic topic)
