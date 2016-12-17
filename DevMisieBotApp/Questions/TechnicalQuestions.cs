@@ -20,7 +20,7 @@ namespace DevMisieBotApp.Questions
             ["What is sealed class in c#?"] = new List<string>() { "restrict ", "cannot", "inheritance ", "inherit", "struct" },
             ["What are partial classes?"] = new List<string>() { "splits", "multiple", "files ", "namespace" },
             ["How to use Nullable<> Types in .Net?"] = new List<string>() { "?", "keyword", "value ", "types" },
-            ["Describe are generics in c#.net."] = new List<string>() { "List", "Dictionary", "Queue ", "Stack","Concurrent" },
+            ["What are generics in c#.net?"] = new List<string>() { "List", "Dictionary", "Queue ", "Stack","Concurrent" },
             ["Describe the accessibility modifiers in c#.Net."] = new List<string>() { "public", "private", "prtected ", "internal","protected internal" },
             ["What is the use of Using statement in C#?"] = new List<string>() { "namespace", "IDisposable", "static", "include" },
 
