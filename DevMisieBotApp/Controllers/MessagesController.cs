@@ -9,6 +9,7 @@ using Microsoft.Bot.Connector;
 using DevMisieBotApp.DB;
 using DevMisieBotApp.Services;
 using DevMisieBotApp.Questions;
+using TTSSample;
 
 
 namespace DevMisieBotApp
@@ -24,7 +25,6 @@ namespace DevMisieBotApp
         private static readonly KeyWordsManager _keyWords_manager = new KeyWordsManager();
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
-
             if (activity.Type == ActivityTypes.Message)
             {
                 ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
@@ -55,7 +55,6 @@ namespace DevMisieBotApp
                 {
                     reply = activity.CreateReply(_question_manager.GetQuestion());
                 }
-
 
                 await connector.Conversations.ReplyToActivityAsync(reply);
             }

@@ -136,6 +136,7 @@
     <Compile Include="Questions\QuestionProvider.cs" />
     <Compile Include="Questions\QuestionsManager.cs" />
     <Compile Include="Questions\TechnicalQuestions.cs" />
+    <Compile Include="Speech\Speech.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
