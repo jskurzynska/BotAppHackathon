@@ -14,13 +14,16 @@ namespace DevMisieBotApp.Conversation
         {
             words = new Dictionary<Topic, List<string>>()
             {
-                {Topic.Introduction, new List<string>() {"hi", "hello", "welcome"}}
+                {Topic.Introduction, new List<string>() {"hi", "hello", "welcome", "nice to meet you"}},
+                {Topic.Music, new List<string>() {"music","listening","listen", "to", "rock", "pop", "sound"}},
+                {Topic.Job, new List<string>() {"not", "without", "developer", "young", "kid"}}
             };
 
         }
 
         public List<string> FindKeyWords(string text, Topic type)
         {
+            text = text.ToLower();
             var keywords = new List<string>();
             MatchCollection matches = Regex.Matches(text, "[a-z]([:']?[a-z])*", RegexOptions.IgnoreCase);
             foreach (Match match in matches)
@@ -49,7 +52,10 @@ namespace DevMisieBotApp.Conversation
                     {
                         return Topic.Reset;
                     }
-
+                    case "restart":
+                    {
+                            return Topic.Reset;
+                    }
                 }  
             }
             return Topic.None;
@@ -64,7 +70,10 @@ namespace DevMisieBotApp.Conversation
 
     public enum Topic
     {
-        Technology,Experience,Finance,Language,Introduction,Joke,Contact,Goodbye, Attempt, BadAnswer, GoodAnswer, None, Reset
+        Technology,Experience,Finance,Language,Introduction,Joke,Contact,Goodbye, Attempt, BadAnswer, GoodAnswer, None, Reset, Music,
+        Job,
+        Closer,
+        Casual
     }
 
 }

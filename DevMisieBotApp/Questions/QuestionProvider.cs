@@ -17,30 +17,37 @@ namespace DevMisieBotApp.Questions
             Questions = new Dictionary<Topic, List<string>>();
             AddQuestionsToPool(new List<string>
             {
-             "How are you?",
-            "How are you feeling?",
-            "What are you going to do today?",
-            "What is your best childhood memory?",
-            "What do you feel most proud of?",
-            "What is your favorite music?",
-            "If you could travel anywhere, where would you go and why?",
-            "If you could only keep five possessions, what would they be?",
-            }, Topic.Joke);
+            "Welcome in our recruitment process, I'm your personal assistant at this stage! I can see you, recognize your sentiment and gather all needed information, can we start?"
+            }, Topic.Introduction);
+            AddQuestionsToPool(new List<string>
+            {
+            "So, really nice to meet you! How are you feeling, can we meet closer? ",
+            "You seems really positive person, can we meet closer?",
+            }, Topic.Closer);
 
             AddQuestionsToPool(new List<string>
             {
-             "Try again"
+            "Let's start with the easy one. If you could travel anywhere, where would you go and why?",
+            "What kind of music do you like listen to?"
+            }, Topic.Casual);
+
+            AddQuestionsToPool(new List<string>
+            {
+             "I didn't get it, can u repeat?",
+             "Can u talk a bit slower? Thanks so much, I'm still learning!"
             }, Topic.Attempt);
-
             AddQuestionsToPool(new List<string>
             {
-             "Where Did you work?"
+             "Do you think maybe about change your current position?"
+            }, Topic.Job);
+            AddQuestionsToPool(new List<string>
+            {
+             "Tell me more about your experience!"
             }, Topic.Experience);
             AddQuestionsToPool(new List<string>
             {
-             "Hi, hi",
-             "Hello"
-            }, Topic.Introduction);
+             ""
+            }, Topic.Joke);
             AddQuestionsToPool(new List<string>
             {
              "Where Did you work?"
