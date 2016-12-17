@@ -62,7 +62,7 @@ namespace TTSSample
             }
             catch (Exception ex)
             {
-                Console.WriteLine(string.Format("Failed renewing access token. Details: {0}", ex.Message));
+               // Console.WriteLine(string.Format("Failed renewing access token. Details: {0}", ex.Message));
             }
             finally
             {
@@ -72,7 +72,7 @@ namespace TTSSample
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(string.Format("Failed to reschedule the timer to renew access token. Details: {0}", ex.Message));
+                   // Console.WriteLine(string.Format("Failed to reschedule the timer to renew access token. Details: {0}", ex.Message));
                 }
             }
         }
@@ -231,7 +231,7 @@ namespace TTSSample
             };
 
             var httpTask = client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
-            Console.WriteLine("Response status code: [{0}]", httpTask.Result.StatusCode);
+           // Console.WriteLine("Response status code: [{0}]", httpTask.Result.StatusCode);
 
             var saveTask = httpTask.ContinueWith(
                 async (responseMessage, token) =>
@@ -405,13 +405,13 @@ namespace TTSSample
         /// <param name="args">The <see cref="GenericEventArgs{Stream}"/> instance containing the event data.</param>
         static void PlayAudio(object sender, GenericEventArgs<Stream> args)
         {
-            Console.WriteLine(args.EventData);
+           // Console.WriteLine(args.EventData);
 
             // For SoundPlayer to be able to play the wav file, it has to be encoded in PCM.
             // Use output audio format AudioOutputFormat.Riff16Khz16BitMonoPcm to do that.
-            SoundPlayer player = new SoundPlayer(args.EventData);
-            player.PlaySync();
-            args.EventData.Dispose();
+            //SoundPlayer player = new SoundPlayer(args.EventData);
+            //player.PlaySync();
+            //args.EventData.Dispose();
         }
 
         /// <summary>
@@ -421,12 +421,12 @@ namespace TTSSample
         /// <param name="e">The <see cref="GenericEventArgs{Exception}"/> instance containing the event data.</param>
         static void ErrorHandler(object sender, GenericEventArgs<Exception> e)
         {
-            Console.WriteLine("Unable to complete the TTS request: [{0}]", e.ToString());
+           // Console.WriteLine("Unable to complete the TTS request: [{0}]", e.ToString());
         }
 
         public void GetSpeechStream(string text)
         {
-            Console.WriteLine("Starting Authtentication");
+            //Console.WriteLine("Starting Authtentication");
             string accessToken;
 
             // Note: The way to get api key:
@@ -437,17 +437,17 @@ namespace TTSSample
             try
             {
                 accessToken = auth.GetAccessToken();
-                Console.WriteLine("Token: {0}\n", accessToken);
+             //   Console.WriteLine("Token: {0}\n", accessToken);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Failed authentication.");
-                Console.WriteLine(ex.ToString());
-                Console.WriteLine(ex.Message);
+               // Console.WriteLine("Failed authentication.");
+               // Console.WriteLine(ex.ToString());
+              //  Console.WriteLine(ex.Message);
                 return;
             }
 
-            Console.WriteLine("Starting TTSSample request code execution.");
+           // Console.WriteLine("Starting TTSSample request code execution.");
 
             string requestUri = "https://speech.platform.bing.com/synthesize";
 

@@ -21,7 +21,6 @@ namespace DevMisieBotApp
         /// Receive a message from a user and reply to it
         /// </summary>
         private static  readonly QuestionsManager _question_manager = new QuestionsManager();
-        private  static readonly Speech _speech = new Speech();
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
             if (activity.Type == ActivityTypes.Message)
@@ -38,12 +37,10 @@ namespace DevMisieBotApp
                 };
                 MessageDB.MessagesList.Add(message);
 
-               // Activity reply = activity.CreateReply($"You sent {activity.Text} which was {length} characters");
-                //var reply = activity.CreateReply(_casualQuestions.GetRandomQuestion());
                 var proper_answer = _question_manager.GetAnswerPersentage(activity.Text);
                 var question = _question_manager.GetQuestion();
                 var reply = activity.CreateReply(question);
-                _speech.GetSpeechStream(question);
+
                 await connector.Conversations.ReplyToActivityAsync(reply);
             }
             else
@@ -51,6 +48,7 @@ namespace DevMisieBotApp
                 HandleSystemMessage(activity);
             }
             var response = Request.CreateResponse(HttpStatusCode.OK);
+            response.Content
             return response;
         }
 
