@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using DevMisieBotApp.Common;
+using DevMisieBotApp.Conversation;
 
 namespace DevMisieBotApp.Questions
 {
@@ -16,13 +17,13 @@ namespace DevMisieBotApp.Questions
 
         private List<string> _used = new List<string>();
         private string _lastQuestion;
-        public string GetRandomQuestion()
+        public string GetRandomQuestion(Topic txt)
         {
              _lastQuestion = _questions.Where(x => !_used.Contains(x.Key)).Random();
             _used.Add(_lastQuestion);
             return _lastQuestion;
         }
-
+        
         public float GetAnswerPersentage(string answer)
         {
             var words = answer.Split(' ');

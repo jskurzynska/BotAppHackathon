@@ -2,59 +2,96 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using DevMisieBotApp.Conversation;
 
 namespace DevMisieBotApp.Questions
 {
     public class QuestionsManager
     {
         private const int HELLO_SENTECE = 1;
-        private const int MAX_CASUAL_QUESTIONS = 5 ;
-        private const int JOB_POSITION_QUESTION = 5 + MAX_CASUAL_QUESTIONS;
-        private readonly QuestionProvider _casual_questions;
-        private readonly QuestionProvider _job_related_questions;
-        private readonly TechnicalQuestions _technical_questions = new TechnicalQuestions();
+        private const int MAX_CASUAL_QUESTIONS = 2;
+        private const int JOB_POSITION_QUESTION = 3 + MAX_CASUAL_QUESTIONS;
+        private readonly QuestionProvider _questionsProvider;
+        
 
         private int _asked_questions_count;
+        public bool AllowToNextQuestion { get; set; }
+        public Topic CurrentTopic { get; set; }
+        public float Sentiment { get; set; }
 
         public QuestionsManager()
         {
-            var casual_questions = new CasualQuestions();
-            _casual_questions = new QuestionProvider(casual_questions._questions);
+            _questionsProvider = new QuestionProvider();
+            Sentiment = 0.5f;
+            AllowToNextQuestion = true;
+            _asked_questions_count = 0;
+            CurrentTopic = Topic.Introduction;
+        }
 
-            var job_related_questions = new QuestionAboutJobPosition();
-            _job_related_questions = new QuestionProvider(job_related_questions._questions);
+
+        public string GetQuestion(Topic topic)
+        {
+            string answer = "";
+            switch (topic)
+            {
+                    case Topic.Joke:
+                {
+                    answer = _questionsProvider.GetRandomQuestion(Topic.Joke);
+                    break;
+                }
+                case Topic.Reset:
+                {
+                    answer = _questionsProvider.GetRandomQuestion(Topic.Reset);
+                    Reset();
+                    break;
+                }
+            }
+            return answer;
         }
 
         public string GetQuestion()
         {
             string question;
-            if (_asked_questions_count < HELLO_SENTECE)
+
+            if (Sentiment < 0.4f)
             {
-                return "Hello! " + _casual_questions.GetRandomQuestion();
+                question = _questionsProvider.GetRandomQuestion(Topic.Joke);
+            }
+            else if (!AllowToNextQuestion)
+            {
+                question = _questionsProvider.GetRandomQuestion(Topic.Attempt);
+            }
+            else if (_asked_questions_count < HELLO_SENTECE)
+            {
+                question = _questionsProvider.GetRandomQuestion(Topic.Introduction);
+                CurrentTopic = Topic.Introduction;
             }
             else if (_asked_questions_count < MAX_CASUAL_QUESTIONS)
             {
-                question =  _casual_questions.GetRandomQuestion();
+                question = _questionsProvider.GetRandomQuestion(Topic.BadAnswer);
+                CurrentTopic = Topic.BadAnswer;
             }
             else if (_asked_questions_count < JOB_POSITION_QUESTION)
             {
-                question = _technical_questions.GetRandomQuestion();
+                question = _questionsProvider.GetRandomQuestion(Topic.Experience);
+                CurrentTopic = Topic.Experience;
             }
             else
             {
-                question = _job_related_questions.GetRandomQuestion();
+                question = _questionsProvider.GetRandomQuestion(Topic.Technology);
+                CurrentTopic = Topic.Joke;
+
             }
             _asked_questions_count++;
             return question;
         }
 
-        public float GetAnswerPersentage(string activityText)
+        public void Reset()
         {
-            if (_asked_questions_count < MAX_CASUAL_QUESTIONS)
-            {
-                return 0;
-            }
-            return _technical_questions.GetAnswerPersentage(activityText);
+            AllowToNextQuestion = true;
+            CurrentTopic = Topic.Introduction;
+            _asked_questions_count = 0;
         }
+
     }
 }
