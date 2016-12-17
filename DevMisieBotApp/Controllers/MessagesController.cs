@@ -48,7 +48,6 @@ namespace DevMisieBotApp
                 HandleSystemMessage(activity);
             }
             var response = Request.CreateResponse(HttpStatusCode.OK);
-            response.Content
             return response;
         }
 
