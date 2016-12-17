@@ -58,7 +58,7 @@ namespace DevMisieBotApp.Questions
         {
             string question;
 
-            if (_asked_questions_count == 1)
+            if (_asked_questions_count < 1)
             {
                 question = _questionsProvider.GetRandomQuestion(Topic.Introduction);
                 CurrentTopic = Topic.Introduction;
@@ -71,16 +71,17 @@ namespace DevMisieBotApp.Questions
             else if (_asked_questions_count == 3)
             {
                 question = _questionsProvider.GetRandomQuestion(Topic.Casual);
+                CurrentTopic = Topic.Casual;
             }
             else if (_asked_questions_count == 4)
             {
                 question = _questionsProvider.GetRandomQuestion(Topic.Experience);
-                CurrentTopic = Topic.Casual;
+                CurrentTopic = Topic.Experience;
             }
             else
             {
                 question = _technicalQuestions.GetRandomQuestion(Topic.Introduction);
-                CurrentTopic = Topic.Joke;
+                CurrentTopic = Topic.Technology;
 
             }
             _asked_questions_count++;
