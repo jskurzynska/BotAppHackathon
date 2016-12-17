@@ -14,6 +14,8 @@ namespace DevMisieBotApp.Questions
         private const int TOJOB = 4;
         private readonly QuestionProvider _questionsProvider;
         private readonly QuestionProvider _techProvider;
+        private readonly  TechnicalQuestions _technicalQuestions = new TechnicalQuestions();
+
         
 
         private int _asked_questions_count;
@@ -77,7 +79,7 @@ namespace DevMisieBotApp.Questions
             }
             else
             {
-                question = _questionsProvider.GetRandomQuestion(Topic.Technology);
+                question = _technicalQuestions.GetRandomQuestion(Topic.Introduction);
                 CurrentTopic = Topic.Joke;
 
             }

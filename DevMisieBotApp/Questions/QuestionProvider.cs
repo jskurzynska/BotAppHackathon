@@ -42,7 +42,20 @@ namespace DevMisieBotApp.Questions
             }, Topic.Job);
             AddQuestionsToPool(new List<string>
             {
-             "Tell me more about your experience!"
+             "Tell me more about your experience!",
+             "Why do you want this job?",
+             "What are your future plans for this job?",
+             "What is the key to success in this organization?",
+             "What Is Your Greatest Strength?",
+             "Do You Have Any Questions?",
+             "If you knew a manager is 100 percent wrong about something, how would you handle it?",
+             "What are your salary expectations?",
+             "How would you feel supervising two or three other employees?",
+             "Are you willing to relocate?",
+             "What are you looking for in terms of career development?",
+             "What do you ultimately want to become?",
+             "What's the last book you read?",
+             "What do you know about this industry?"
             }, Topic.Experience);
             AddQuestionsToPool(new List<string>
             {
