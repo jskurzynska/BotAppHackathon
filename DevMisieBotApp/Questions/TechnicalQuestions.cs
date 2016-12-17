@@ -12,18 +12,29 @@ namespace DevMisieBotApp.Questions
         public const float NOT_QUESTION_ASKED = -1;
         private Dictionary<string, List<string>> _questions = new Dictionary<string, List<string>>()
         {
-            [@"What do you know about ""const"" keyword in .NET"] = new List<string>() { "compilation" },
+            [@"What do you know about ""const"" keyword in .NET"] = new List<string>() { "compilation", "must", "assign", },
+            ["What is Boxing and Unboxing?"] = new List<string>() { "conversion", "type", },
+            ["Can “this” be used within a static method?"] = new List<string>() { "no","nope", },
+            ["What is extension method in c# and how to use them?"] = new List<string>() { "recompiling", "recompile", "modifying","satic","this","class","method" },
+            ["What is delegates in C#?"] = new List<string>() { "reference", "method", "pointer","removed","assign"},
+            ["What is sealed class in c#?"] = new List<string>() { "restrict ", "cannot", "inheritance ", "inherit", "struct" },
+            ["What are partial classes?"] = new List<string>() { "splits", "multiple", "files ", "namespace" },
+            ["How to use Nullable<> Types in .Net?"] = new List<string>() { "?", "keyword", "value ", "types" },
+            ["Describe are generics in c#.net."] = new List<string>() { "List", "Dictionary", "Queue ", "Stack","Concurrent" },
+            ["Describe the accessibility modifiers in c#.Net."] = new List<string>() { "public", "private", "prtected ", "internal","protected internal" },
+            ["What is the use of Using statement in C#?"] = new List<string>() { "namespace", "IDisposable", "static", "include" },
+
         };
 
         private List<string> _used = new List<string>();
         private string _lastQuestion;
         public string GetRandomQuestion(Topic txt)
         {
-             _lastQuestion = _questions.Where(x => !_used.Contains(x.Key)).Random();
+            _lastQuestion = _questions.Where(x => !_used.Contains(x.Key)).Random();
             _used.Add(_lastQuestion);
             return _lastQuestion;
         }
-        
+
         public float GetAnswerPersentage(string answer)
         {
             var words = answer.Split(' ');
@@ -40,7 +51,7 @@ namespace DevMisieBotApp.Questions
                     correct_key_words++;
                 }
             }
-           return correct_key_words/key_words.Count *100;
+            return correct_key_words / key_words.Count * 100;
         }
     }
 }
