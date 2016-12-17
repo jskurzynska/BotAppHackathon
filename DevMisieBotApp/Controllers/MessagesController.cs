@@ -13,7 +13,7 @@ using TTSSample;
 
 namespace DevMisieBotApp
 {
-    [BotAuthentication]
+    //[BotAuthentication]
     public class MessagesController : ApiController
     {
         /// <summary>
@@ -21,34 +21,40 @@ namespace DevMisieBotApp
         /// Receive a message from a user and reply to it
         /// </summary>
         private static  readonly QuestionsManager _question_manager = new QuestionsManager();
-        public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
+        [HttpPost]
+        public IHttpActionResult Post([FromBody]Activity activity)
         {
+            Activity reply;
+            string question = "";
+
             if (activity.Type == ActivityTypes.Message)
             {
                 ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
                 // calculate something for us to return
                 int length = (activity.Text ?? string.Empty).Length;
-                var keyPhrases = await TextAnalytics.GetKeyPhrases(activity.Text,activity.Id);
+                var keyPhrases =  TextAnalytics.GetKeyPhrases(activity.Text,activity.Id);
                 var message = new MessageModel()
                 {
-                    KeyPhrases = keyPhrases.documents[0].keyPhrases,
+                   // KeyPhrases = keyPhrases.documents[0].keyPhrases,
                     MessageID = activity.Id,
                     Text = activity.Text
                 };
                 MessageDB.MessagesList.Add(message);
 
                 var proper_answer = _question_manager.GetAnswerPersentage(activity.Text);
-                var question = _question_manager.GetQuestion();
-                var reply = activity.CreateReply(question);
+                 question = _question_manager.GetQuestion();
+                 //reply = activity.CreateReply(question);
 
-                await connector.Conversations.ReplyToActivityAsync(reply);
+                // connector.Conversations.ReplyToActivityAsync(reply);
             }
             else
             {
                 HandleSystemMessage(activity);
             }
-            var response = Request.CreateResponse(HttpStatusCode.OK);
-            return response;
+            //var response = Request.CreateResponse(HttpStatusCode.OK);
+            //response.Content = 
+            //return response;
+            return Ok(question);
         }
 
         private Activity HandleSystemMessage(Activity message)
